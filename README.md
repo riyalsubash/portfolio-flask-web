@@ -176,4 +176,4 @@ __pycache__/
 
 ## 13. License
 MIT License  
-Copyright (c) 2025 <SUBASH>
+Copyright (c) 2025 SUBASH
