@@ -118,15 +118,43 @@ For production:
 ---
 
 ## 9. Project Structure
-```text
-portfolio-flask-web/
-├── app.py
-├── models.py
-├── templates/
-├── static/
-├── requirements.txt
-├── .env.example
-└── README.md
+```markdown
+📂 portfolio-flask-web-unzipped
+📂 portfolio-flask-web
+    📄 app.py
+    📄 portfolio.sql
+    📄 requirements.txt
+    📄 vercel.json
+    📂 static
+        📂 css
+            📄 admin.css
+            📄 dashboard.css
+            📂 home
+                📄 style.css
+            📂 skills
+                📄 style.css
+        📂 js
+            📂 home
+                📄 script.js
+    📂 templates
+        📄 main.html
+        📂 admin
+            📄 admin.html
+            📄 contact.html
+            📄 dashboard.html
+            📄 edit_home.html
+            📄 reply.html
+            📄 settings.html
+        📂 default
+            📄 404.html
+        📂 projects
+            📄 add_project.html
+            📄 edit_project.html
+            📄 projects_list.html
+        📂 skills
+            📄 add_skill.html
+            📄 edit_skill.html
+            📄 view_skills.html
 ```
 
 ---
