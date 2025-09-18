@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>View Skills</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/skills/style.css') }}">
+</head>
+<body>
+  <div class="content">
+    <div class="page-header">
+      <h1 class="page-title">⚡ All Skills</h1>
+      <p class="page-subtitle">Manage and organize skills easily</p>
+    </div>
+
+    <div class="stats-grid">
+      {% for skill in skills %}
+      <div class="stat-card">
+        <div class="stat-header">
+          <div class="stat-info">
+            <h3 class="stat-value">{{ skill.name }}</h3>
+            <p class="stat-description">{{ skill.category.name }}</p>
+          </div>
+        </div>
+        <div class="stat-trend">
+          <a href="{{ url_for('edit_skill', skill_id=skill.id) }}" class="action-btn">✏️ Edit</a>
+          <a href="{{ url_for('delete_skill', skill_id=skill.id) }}" class="action-btn" style="color:var(--accent-danger);">🗑 Delete</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <a href="{{ url_for('add_skill') }}" class="menu-toggle">➕ Add New Skill</a>
+  </div>
+</body>
+</html>

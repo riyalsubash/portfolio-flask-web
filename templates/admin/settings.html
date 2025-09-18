@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Account Settings</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        :root {
+          --bg-primary: #0a0a0f;
+          --bg-card: rgba(255, 255, 255, 0.05);
+          --accent-primary: #6366f1;
+          --accent-secondary: #8b5cf6;
+          --accent-danger: #ef4444;
+          --text-primary: #ffffff;
+          --text-secondary: #a1a1aa;
+          --text-muted: #71717a;
+          --border: rgba(255, 255, 255, 0.1);
+          --shadow-glow: 0 0 40px rgba(99, 102, 241, 0.1);
+          --shadow-intense: 0 20px 40px rgba(0, 0, 0, 0.3);
+          --blur-backdrop: blur(20px);
+        }
+
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+
+        body {
+          font-family: 'Inter', sans-serif;
+          background: var(--bg-primary);
+          background-image: 
+            radial-gradient(circle at 10% 90%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 90% 10%, rgba(139, 92, 246, 0.1) 0%, transparent 50%);
+          color: var(--text-primary);
+          min-height: 100vh;
+        }
+
+        .main-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .settings-card {
+            width: 100%;
+            max-width: 700px;
+            background: var(--bg-card);
+            backdrop-filter: var(--blur-backdrop);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow-intense);
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            color: var(--text-secondary);
+        }
+
+        .form-section {
+            margin-bottom: 2.5rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .form-section:last-of-type {
+            border-bottom: none;
+            padding-bottom: 0;
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .avatar-upload {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        .avatar-preview {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.3);
+            border: 2px dashed var(--border);
+            object-fit: cover;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.75rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            background: rgba(0,0,0,0.25);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+        }
+
+        .password-group {
+            position: relative;
+        }
+        .password-toggle {
+            position: absolute;
+            top: 50%;
+            right: 1rem;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+        .password-toggle:hover {
+            color: var(--text-primary);
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+        }
+        .btn-secondary {
+            background: rgba(255,255,255,0.05);
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+        }
+        .btn-danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--accent-danger);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-glow);
+        }
+        .btn-danger:hover {
+            background: var(--accent-danger);
+            color: white;
+            box-shadow: 0 0 40px rgba(239, 68, 68, 0.3);
+        }
+
+        .danger-zone {
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-top: 2.5rem;
+        }
+
+        @media (max-width: 576px) {
+            .main-container { padding: 1rem; }
+            .settings-card { padding: 1.5rem; }
+            .page-title { font-size: 1.5rem; }
+            .form-actions { flex-direction: column-reverse; }
+            .btn { width: 100%; justify-content: center; }
+            .avatar-upload { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="settings-card">
+            <div class="page-header">
+                <h1 class="page-title">Account Settings</h1>
+                <p class="page-subtitle">Manage your administrator credentials and profile.</p>
+            </div>
+
+            <form method="POST">
+                <div class="form-section">
+                    <h2 class="section-title">Profile</h2>
+                    
+                    <div class="form-group">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" id="username" name="username" class="form-control" value="{{ current_admin.username }}" required>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h2 class="section-title">Security</h2>
+                    <div class="form-group">
+                        <label for="password" class="form-label">New Password</label>
+                        <div class="password-group">
+                            <input type="password" id="password" name="password" class="form-control" placeholder="Leave blank to keep current password">
+                            <button type="button" class="password-toggle" onclick="togglePasswordVisibility()">
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Save Changes
+                    </button>
+                </div>
+            </form>
+
+            
+        </div>
+    </div>
+
+    <script>
+        function togglePasswordVisibility() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.querySelector('.password-toggle i');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            }
+        }
+
+        // Optional: Preview avatar image on selection
+        const avatarInput = document.getElementById('avatar');
+        if (avatarInput) {
+            avatarInput.addEventListener('change', function(event) {
+                const [file] = event.target.files;
+                if (file) {
+                    const preview = document.getElementById('avatarPreview');
+                    preview.src = URL.createObjectURL(file);
+                }
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{url_for('static',filename='css/dashboard.css')}}">
+</head>
+<body>
+  <!-- Animated Background -->
+  <div class="bg-orbs">
+    <div class="orb"></div>
+    <div class="orb"></div>
+    <div class="orb"></div>
+  </div>
+
+  <!-- Overlay -->
+  <div class="overlay" id="overlay"></div>
+
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <button class="close-btn" id="closeBtn">
+      <i class="fas fa-times"></i>
+    </button>
+    
+    <div class="sidebar-header">
+      <div class="logo-container">
+        <div class="logo">
+          <i class="fas fa-chart-line"></i>
+        </div>
+        <div class="logo-text">Dashboard</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section">
+        <div class="nav-title">Main</div>
+        <a href="#" class="nav-link active">
+          <i class="fas fa-home"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="{{ url_for('edit_home') }}" class="nav-link">
+          <i class="fas fa-edit"></i>
+          <span>Edit Profile</span>
+        </a>
+      </div>
+
+      <div class="nav-section">
+        <div class="nav-title">Management</div>
+        <a href="{{url_for('contacts')}}" class="nav-link">
+          <i class="fas fa-envelope"></i>
+          <span>Messages</span>
+        </a>
+        <a href="{{url_for('list_projects')}}" class="nav-link">
+          <i class="fas fa-chart-bar"></i>
+          <span>Projects</span>
+        </a>
+      </div>
+
+      <div class="nav-section">
+        <div class="nav-title">Account</div>
+        <a href="{{ url_for('settings') }}" class="nav-link">
+          <i class="fas fa-cog"></i>
+          <span>Settings</span>
+        </a>
+        <a href="{{ url_for('logout') }}" class="nav-link">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Logout</span>
+        </a>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Main Container -->
+  <div class="main-container">
+    <!-- Top Navigation -->
+    <div class="top-nav">
+      <div class="nav-content">
+        <button class="menu-toggle" id="menuToggle">
+          <i class="fas fa-bars"></i>
+          <span>Menu</span>
+        </button>
+        
+        <div class="user-section">
+          <div class="user-avatar">
+            <i class="fas fa-user"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+      <!-- Page Header -->
+      <div class="page-header">
+        <h1 class="page-title">Welcome Back, {{admin.name}}! ✨</h1>
+        <p class="page-subtitle">Your digital empire awaits. Here's what's happening in your world today.</p>
+      </div>
+
+      <!-- Stats Grid -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-header">
+            <div class="stat-info">
+              <div class="stat-label">New Messages</div>
+              <div class="stat-value" data-target="{{not_seen}}">0</div>
+              <!-- <div class="stat-description">Unread conversations</div> -->
+            </div>
+            <div class="stat-icon icon-messages">
+              <i class="fas fa-envelope"></i>
+            </div>
+          </div>
+          <!-- <div class="stat-trend trend-positive">
+            <i class="fas fa-arrow-up"></i>
+            <span>+23% from last week</span>
+          </div> -->
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-header">
+            <div class="stat-info">
+              <div class="stat-label">Not Replied</div>
+              <div class="stat-value" data-target="{{not_replied}}">0</div>
+              <!-- <div class="stat-description">Connected & monitored</div> -->
+            </div>
+            <div class="stat-icon icon-devices">
+              <i class="fas fa-laptop"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-header">
+            <div class="stat-info">
+              <div class="stat-label">Projects</div>
+              <div class="stat-value" data-target="{{project_count}}">0</div>
+              <!-- <div class="stat-description">Connected & monitored</div> -->
+            </div>
+            <div class="stat-icon icon-devices">
+              <i class="fas fa-laptop"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- <div class="stat-card">
+          <div class="stat-header">
+            <div class="stat-info">
+              <div class="stat-label">Page Views</div>
+              <div class="stat-value" data-target="12567">0</div>
+              <div class="stat-description">Total impressions</div>
+            </div>
+            <div class="stat-icon icon-views">
+              <i class="fas fa-eye"></i>
+            </div>
+          </div>
+          <div class="stat-trend trend-positive">
+            <i class="fas fa-arrow-up"></i>
+            <span>+45% growth</span>
+          </div>
+        </div> -->
+
+        <!-- <div class="stat-card">
+          <div class="stat-header">
+            <div class="stat-info">
+              <div class="stat-label">Performance</div>
+              <div class="stat-value" data-target="98">0</div>
+              <div class="stat-description">System health</div>
+            </div>
+            <div class="stat-icon icon-reports">
+              <i class="fas fa-chart-line"></i>
+            </div>
+          </div>
+          <div class="stat-trend trend-positive">
+            <i class="fas fa-check-circle"></i>
+            <span>All systems operational</span>
+          </div>
+        </div> -->
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="quick-actions">
+        <h2 class="section-title">
+          <i class="fas fa-bolt"></i>
+          Quick Actions
+        </h2>
+        
+        <div class="actions-grid">
+          <a href="{{ url_for('edit_home') }}" class="action-btn">
+            <i class="fas fa-edit"></i>
+            <div>
+              <div>Edit Profile</div>
+              <small style="color: var(--text-muted);">Update your information</small>
+            </div>
+          </a>
+          
+          <a href="{{ url_for('contacts') }}" class="action-btn">
+            <i class="fas fa-envelope"></i>
+            <div>
+              <div>View Messages</div>
+              <small style="color: var(--text-muted);">Check conversations</small>
+            </div>
+          </a>
+          
+
+          
+          <a href="{{url_for('list_projects')}}" class="action-btn">
+            <i class="fas fa-chart-bar"></i>
+            <div>
+              <div>Projects</div>
+              <small style="color: var(--text-muted);">View detailed stats</small>
+            </div>
+          </a>
+          
+          <a href="{{ url_for('settings') }}" class="action-btn">
+            <i class="fas fa-cog"></i>
+            <div>
+              <div>Settings</div>
+              <small style="color: var(--text-muted);">Configure preferences</small>
+            </div>
+          </a>
+          
+          <!-- <a href="#" class="action-btn">
+            <i class="fas fa-download"></i>
+            <div>
+              <div>Export Data</div>
+              <small style="color: var(--text-muted);">Download reports</small>
+            </div>
+          </a> -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Sidebar functionality
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    const closeBtn = document.getElementById('closeBtn');
+
+    function openSidebar() {
+      sidebar.classList.add('active');
+      overlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeSidebar() {
+      sidebar.classList.remove('active');
+      overlay.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    menuToggle?.addEventListener('click', openSidebar);
+    closeBtn?.addEventListener('click', closeSidebar);
+    overlay?.addEventListener('click', closeSidebar);
+
+    // Keyboard navigation
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeSidebar();
+      }
+    });
+
+    // Animated counter for stats
+    function animateCounter(element, target, duration = 2000) {
+      const start = parseInt(element.textContent) || 0;
+      const range = target - start;
+      const startTime = performance.now();
+
+      function updateCounter(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        
+        // Easing function for smooth animation
+        const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+        const current = Math.floor(start + (range * easeOutQuart));
+        
+        element.textContent = current.toLocaleString();
+        
+        if (progress < 1) {
+          requestAnimationFrame(updateCounter);
+        } else {
+          element.textContent = target.toLocaleString();
+        }
+      }
+      
+      requestAnimationFrame(updateCounter);
+    }
+
+    // Initialize counters when page loads
+    function initializeCounters() {
+      const counters = document.querySelectorAll('[data-target]');
+      
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const target = parseInt(entry.target.dataset.target);
+            animateCounter(entry.target, target);
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.5 });
+
+      counters.forEach(counter => {
+        observer.observe(counter);
+      });
+    }
+
+    // Staggered animation for stat cards
+    function animateStatCards() {
+      const cards = document.querySelectorAll('.stat-card');
+      
+      cards.forEach((card, index) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(40px) scale(0.9)';
+        
+        setTimeout(() => {
+          card.style.transition = 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
+          card.style.opacity = '1';
+          card.style.transform = 'translateY(0) scale(1)';
+        }, index * 150);
+      });
+    }
+
+    // Staggered animation for action buttons
+    function animateActionButtons() {
+      const buttons = document.querySelectorAll('.action-btn');
+      
+      buttons.forEach((button, index) => {
+        button.style.opacity = '0';
+        button.style.transform = 'translateX(-20px)';
+        
+        setTimeout(() => {
+          button.style.transition = 'all 0.4s ease';
+          button.style.opacity = '1';
+          button.style.transform = 'translateX(0)';
+        }, 800 + (index * 100));
+      });
+    }
+
+    // Enhanced hover effects for navigation links
+    function enhanceNavLinks() {
+      const navLinks = document.querySelectorAll('.nav-link');
+      
+      navLinks.forEach(link => {
+        link.addEventListener('mouseenter', function() {
+          this.style.transform = 'translateX(12px) scale(1.02)';
+        });
+        
+        link.addEventListener('mouseleave', function() {
+          this.style.transform = this.classList.contains('active') 
+            ? 'translateX(8px) scale(1)' 
+            : 'translateX(0) scale(1)';
+        });
+      });
+    }
+
+    // Loading state for action buttons
+    function addLoadingStates() {
+      const actionButtons = document.querySelectorAll('.action-btn');
+      
+      actionButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+          if (this.href === '#' || this.href.includes('#')) {
+            e.preventDefault();
+            
+            const icon = this.querySelector('i');
+            const originalClass = icon.className;
+            
+            // Add loading state
+            this.style.pointerEvents = 'none';
+            this.style.opacity = '0.7';
+            icon.className = 'fas fa-spinner fa-spin';
+            
+            // Reset after delay
+            setTimeout(() => {
+              this.style.pointerEvents = '';
+              this.style.opacity = '';
+              icon.className = originalClass;
+            }, 1500);
+          }
+        });
+      });
+    }
+
+    // Parallax effect for background orbs
+    function initializeParallax() {
+      const orbs = document.querySelectorAll('.orb');
+      
+      document.addEventListener('mousemove', (e) => {
+        const x = e.clientX / window.innerWidth;
+        const y = e.clientY / window.innerHeight;
+        
+        orbs.forEach((orb, index) => {
+          const speed = (index + 1) * 0.5;
+          const xPos = (x - 0.5) * speed * 50;
+          const yPos = (y - 0.5) * speed * 50;
+          
+          orb.style.transform = `translate(${xPos}px, ${yPos}px)`;
+        });
+      });
+    }
+
+    // Dynamic greeting based on time
+    function updateGreeting() {
+      const hour = new Date().getHours();
+      const title = document.querySelector('.page-title');
+      
+      if (hour < 12) {
+        title.innerHTML = 'Good Morning, {{admin.name}}! ☀️';
+      } else if (hour < 17) {
+        title.innerHTML = 'Good Afternoon, {{admin.name}}! 🌅';
+      } else {
+        title.innerHTML = 'Good Evening, {{admin.name}}! 🌙';
+      }
+    }
+
+    // Responsive sidebar behavior
+    function handleResize() {
+      if (window.innerWidth >= 1024) {
+        closeSidebar();
+        sidebar.classList.remove('active');
+      }
+    }
+
+    // Page visibility change handler
+    function handleVisibilityChange() {
+      if (!document.hidden) {
+        // Re-animate counters when page becomes visible
+        initializeCounters();
+      }
+    }
+
+    // Advanced stat card interactions
+    function enhanceStatCards() {
+      const statCards = document.querySelectorAll('.stat-card');
+      
+      statCards.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+          // Add subtle glow effect
+          this.style.boxShadow = `
+            var(--shadow-glow),
+            var(--shadow-intense),
+            0 0 60px rgba(99, 102, 241, 0.15)
+          `;
+        });
+        
+        card.addEventListener('mouseleave', function() {
+          this.style.boxShadow = '';
+        });
+        
+        // Click animation
+        card.addEventListener('click', function() {
+          this.style.transform = 'translateY(-8px) scale(0.98)';
+          setTimeout(() => {
+            this.style.transform = 'translateY(-8px) scale(1.02)';
+          }, 100);
+        });
+      });
+    }
+
+    // Smooth scroll for any anchor links
+    function initializeSmoothScroll() {
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          if (this.getAttribute('href') !== '#') {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+              target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+              });
+            }
+          }
+        });
+      });
+    }
+
+    // Initialize all functionality when DOM is loaded
+    document.addEventListener('DOMContentLoaded', function() {
+      updateGreeting();
+      
+      // Small delay to ensure smooth animations
+      setTimeout(() => {
+        animateStatCards();
+        animateActionButtons();
+        initializeCounters();
+      }, 300);
+      
+      enhanceNavLinks();
+      addLoadingStates();
+      initializeParallax();
+      enhanceStatCards();
+      initializeSmoothScroll();
+    });
+
+    // Event listeners
+    window.addEventListener('resize', handleResize);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    // Performance optimization - throttle resize events
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(handleResize, 250);
+    });
+
+    // Add subtle screen wake animation
+    window.addEventListener('load', function() {
+      document.body.style.opacity = '0';
+      document.body.style.transform = 'scale(0.98)';
+      
+      setTimeout(() => {
+        document.body.style.transition = 'all 0.6s ease';
+        document.body.style.opacity = '1';
+        document.body.style.transform = 'scale(1)';
+      }, 100);
+    });
+
+    // Easter egg - konami code for special animation
+    let konamiCode = [];
+    const konamiSequence = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight'];
+    
+    document.addEventListener('keydown', function(e) {
+      konamiCode.push(e.key);
+      konamiCode = konamiCode.slice(-8);
+      
+      if (konamiCode.join('') === konamiSequence.join('')) {
+        // Special celebration animation
+        const orbs = document.querySelectorAll('.orb');
+        orbs.forEach((orb, index) => {
+          setTimeout(() => {
+            orb.style.filter = 'blur(60px) hue-rotate(180deg)';
+            orb.style.transform = 'scale(1.5) rotate(360deg)';
+            orb.style.transition = 'all 1s ease';
+            
+            setTimeout(() => {
+              orb.style.filter = 'blur(60px)';
+              orb.style.transform = 'scale(1) rotate(0deg)';
+            }, 1000);
+          }, index * 200);
+        });
+        
+        konamiCode = [];
+      }
+    });
+  </script>
+</body>
+</html>

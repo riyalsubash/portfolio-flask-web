@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reply to {{ contact.name }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        :root {
+          --bg-primary: #0a0a0f;
+          --bg-secondary: #1a1a2e;
+          --bg-card: rgba(255, 255, 255, 0.05);
+          --accent-primary: #6366f1;
+          --accent-secondary: #8b5cf6;
+          --text-primary: #ffffff;
+          --text-secondary: #a1a1aa;
+          --text-muted: #71717a;
+          --border: rgba(255, 255, 255, 0.1);
+          --shadow-glow: 0 0 40px rgba(99, 102, 241, 0.1);
+          --shadow-intense: 0 20px 40px rgba(0, 0, 0, 0.3);
+          --blur-backdrop: blur(20px);
+        }
+
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+
+        body {
+          font-family: 'Inter', sans-serif;
+          background: var(--bg-primary);
+          background-image: 
+            radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.1) 0%, transparent S50%),
+            radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 50%);
+          color: var(--text-primary);
+          min-height: 100vh;
+        }
+        
+        /* Animated Orbs */
+        .bg-orbs { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1; }
+        .orb { position: absolute; border-radius: 50%; background: linear-gradient(45deg, var(--accent-primary), var(--accent-secondary)); filter: blur(60px); opacity: 0.1; animation: float 20s ease-in-out infinite; }
+        .orb:nth-child(1) { width: 300px; height: 300px; top: -150px; left: -150px; }
+        .orb:nth-child(2) { width: 400px; height: 400px; bottom: -200px; right: -100px; animation-delay: -10s; }
+        @keyframes float { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(40px, -30px); } }
+
+        .main-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .reply-card {
+            width: 100%;
+            max-width: 800px;
+            background: var(--bg-card);
+            backdrop-filter: var(--blur-backdrop);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow-intense);
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--text-primary), var(--accent-primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            color: var(--text-secondary);
+        }
+
+        /* Original Message Block */
+        .original-message {
+            background: rgba(0,0,0,0.2);
+            padding: 1.5rem;
+            border-radius: 16px;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+        }
+        .original-message-header {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .original-message-content {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        /* Form Styling */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.75rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(0,0,0,0.25);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+        }
+        .form-control[readonly] {
+            background: rgba(0,0,0,0.4);
+            color: var(--text-muted);
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 150px;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+        }
+        .btn-secondary {
+            background: rgba(255,255,255,0.05);
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+        }
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        @media (max-width: 576px) {
+            .main-container { padding: 1rem; }
+            .reply-card { padding: 1.5rem; }
+            .page-title { font-size: 1.5rem; }
+            .form-actions { flex-direction: column-reverse; }
+            .btn { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-orbs">
+        <div class="orb"></div>
+        <div class="orb"></div>
+    </div>
+
+    <div class="main-container">
+        <div class="reply-card">
+            <div class="page-header">
+                <h1 class="page-title">Compose Reply</h1>
+                <p class="page-subtitle">Replying to message from <strong>{{ contact.name }}</strong></p>
+            </div>
+
+            <div class="original-message">
+                <div class="original-message-header">
+                    <i class="fas fa-quote-left"></i>
+                    Original Message
+                </div>
+                <div class="original-message-content">
+                    {{ contact.message }}
+                </div>
+            </div>
+
+            <form method="POST">
+                <div class="form-group">
+                    <label class="form-label" for="to_email">To</label>
+                    <input type="email" id="to_email" name="to" class="form-control" value="{{ contact.email }}" readonly>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="subject">Subject</label>
+                    <input type="text" id="subject" name="subject" class="form-control" value="Re: Your Inquiry" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="body">Your Message</label>
+                    <textarea id="body" name="body" class="form-control" placeholder="Type your reply here..." required>
+Hi {{ contact.name }},
+
+Thank you for reaching out to us. 
+
+
+Best regards,
+
+</textarea>
+                </div>
+                
+                <div class="form-actions">
+                    <a href="{{ url_for('contacts') }}" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> Cancel
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-paper-plane"></i> Send Reply
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
