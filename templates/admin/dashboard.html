@@ -53,8 +53,16 @@
           <span>Messages</span>
         </a>
         <a href="{{url_for('list_projects')}}" class="nav-link">
-          <i class="fas fa-chart-bar"></i>
+          <i class="fas fa-money-bill-wave"></i>
           <span>Projects</span>
+        </a>
+        <a href="{{url_for('expenses')}}" class="nav-link">
+          <i class="fas fa-chart-bar"></i>
+          <span>Expenses</span>
+        </a>
+        <a href="{{url_for('view_students')}}" class="nav-link">
+          <i class="fas fa-users"></i>
+          <span>Students</span>
         </a>
       </div>
 
@@ -143,22 +151,18 @@
           </div>
         </div>
 
-        <!-- <div class="stat-card">
+        <div class="stat-card">
           <div class="stat-header">
             <div class="stat-info">
-              <div class="stat-label">Page Views</div>
-              <div class="stat-value" data-target="12567">0</div>
-              <div class="stat-description">Total impressions</div>
+              <div class="stat-label">Expenses</div>
+              <div class="stat-value" data-target="{{total}}">0</div>
+              <div class="stat-description">Total Spent</div>
             </div>
             <div class="stat-icon icon-views">
               <i class="fas fa-eye"></i>
             </div>
           </div>
-          <div class="stat-trend trend-positive">
-            <i class="fas fa-arrow-up"></i>
-            <span>+45% growth</span>
-          </div>
-        </div> -->
+        </div>
 
         <!-- <div class="stat-card">
           <div class="stat-header">

@@ -85,14 +85,18 @@
     </div>
     
     <div class="settings-body">
-      <form method="POST" id="homeForm" enctype="multipart/form-data">
+      <form method="POST" enctype="multipart/form-data">
         
         <div class="form-section">
           <h3 class="section-title"><i class="fas fa-user-circle"></i> Main Profile</h3>
           <div class="row g-4 align-items-center mb-4">
             <div class="col-md-4 d-flex justify-content-center">
               <div class="image-upload-container">
-                <img src="https://res.cloudinary.com/dsf4cui9f/image/upload/v1/{{ home_data.firstImage }} " alt="First Image" class="image-preview" id="firstImagePreview">
+                {% if home_data and home_data.firstimage %}
+                  <img src="https://res.cloudinary.com/dsf4cui9f/image/upload/w_300,h_300,c_fill,f_auto,q_auto/{{ home_data.firstimage }}" alt="First Image" class="image-preview" id="firstImagePreview">
+                {% else %}
+                  <img src="https://via.placeholder.com/150" alt="First Image" class="image-preview" id="firstImagePreview">
+                {% endif %}
                 <label for="firstImageUpload" class="image-upload-label" title="Change first image"><i class="fas fa-camera"></i></label>
                 <input type="file" id="firstImageUpload" name="firstImage" class="form-control d-none" accept="image/*">
               </div>
@@ -135,7 +139,11 @@
             <div class="row g-4 align-items-center">
                 <div class="col-md-4 d-flex justify-content-center">
                     <div class="image-upload-container">
-                        <img src="https://res.cloudinary.com/dsf4cui9f/image/upload/v1/{{ home_data.secondImage }} " alt="Secondary Image" class="image-preview" id="secondImagePreview">
+                        {% if home_data and home_data.secondimage %}
+                            <img src="https://res.cloudinary.com/dsf4cui9f/image/upload/w_300,h_300,c_fill,f_auto,q_auto/{{ home_data.secondimage }}" alt="Secondary Image" class="image-preview" id="secondImagePreview">
+                        {% else %}
+                            <img src="https://via.placeholder.com/150" alt="Secondary Image" class="image-preview" id="secondImagePreview">
+                        {% endif %}
                         <label for="secondImageUpload" class="image-upload-label" title="Change second image"><i class="fas fa-camera"></i></label>
                         <input type="file" id="secondImageUpload" name="secondImage" class="form-control d-none" accept="image/*">
                     </div>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if student %}Edit Student{% else %}Add New Student{% endif %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #0a0a0f; color: #f8f9fa; }
+        .card { background-color: #1a1a2e; border: 1px solid rgba(255, 255, 255, 0.1); }
+        .form-control, .form-select { background-color: #0a0a0f; color: #f8f9fa; border-color: rgba(255, 255, 255, 0.2); }
+        .form-control:focus, .form-select:focus { background-color: #0a0a0f; color: #f8f9fa; border-color: #6366f1; box-shadow: 0 0 0 0.25rem rgba(99, 102, 241, 0.25); }
+        .btn-primary { background-color: #6366f1; border-color: #6366f1; }
+        .image-preview { width: 150px; height: 150px; object-fit: cover; border-radius: 50%; border: 3px solid #6366f1; }
+    </style>
+</head>
+<body>
+    <div class="container my-5">
+        <div class="card shadow-lg">
+            <div class="card-header">
+                <h2 class="mb-0" style="color: #fff;">{% if student %}Edit Student Details{% else %}Add a New Student{% endif %}</h2>
+            </div>
+            <div class="card-body p-4">
+                 {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}" role="alert">{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                <form method="POST" enctype="multipart/form-data">
+                    <div class="row">
+                        <!-- Left Side: Image and Personal Details -->
+                        <div class="col-md-4 text-center">
+                             {% if student and student.image %}
+                                <img src="https://res.cloudinary.com/dsf4cui9f/image/upload/w_300,h_300,c_fill,f_auto,q_auto/{{ student.image }}" id="imagePreview" class="image-preview mb-3" alt="Student Image">
+                            {% else %}
+                                <img src="{{url_for('static',filename='assets/students/default.png')}}" id="imagePreview" class="image-preview mb-3" alt="Placeholder Image">
+                            {% endif %}
+                            <input type="file" name="image" class="form-control" id="imageUpload" accept="image/*">
+                            <hr class="d-md-none">
+                        </div>
+
+                        <!-- Right Side: Form Fields -->
+                        <div class="col-md-8" style="color: #fff;">
+                            <h4><i class="fas fa-user"></i> Basic Information</h4>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Full Name <span class="text-danger">*</span></label>
+                                    <input type="text" name="name" class="form-control" value="{{ student.name if student else '' }}" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Roll No <span class="text-danger">*</span></label>
+                                    <input type="text" name="roll_no" class="form-control" value="{{ student.roll_no if student else '' }}" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" name="email" class="form-control" value="{{ student.email if student else '' }}">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Date of Birth</label>
+                                    <input type="date" name="dob" class="form-control" value="{{ student.dob if student else '' }}">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Department</label>
+                                    <input type="text" name="dpt" class="form-control" value="{{ student.dpt if student else '' }}">
+                                </div>
+                                 <div class="col-md-6">
+                                    <label class="form-label">Phone Number</label>
+                                    <input type="tel" name="ph_no" class="form-control" value="{{ student.ph_no if student else '' }}">
+                                </div>
+                            </div>
+                            <hr>
+                            <h4><i class="fas fa-users"></i> Parent's Information</h4>
+                            <div class="row g-3">
+                               <div class="col-md-6"><label class="form-label">Father's Name</label><input type="text" name="f_name" class="form-control" value="{{ student.f_name if student else '' }}"></div>
+                               <div class="col-md-6"><label class="form-label">Father's Phone</label><input type="tel" name="f_phno" class="form-control" value="{{ student.f_phno if student else '' }}"></div>
+                               <div class="col-md-6"><label class="form-label">Mother's Name</label><input type="text" name="m_name" class="form-control" value="{{ student.m_name if student else '' }}"></div>
+                               <div class="col-md-6"><label class="form-label">Mother's Phone</label><input type="tel" name="m_phno" class="form-control" value="{{ student.m_phno if student else '' }}"></div>
+                            </div>
+                             <hr>
+                            <h4><i class="fas fa-id-card"></i> Other Details</h4>
+                            <div class="row g-3">
+                                <div class="col-12"><label class="form-label">Aadhaar No</label><input type="text" name="aadhaar_no" class="form-control" value="{{ student.aadhaar_no if student else '' }}"></div>
+                                <div class="col-12"><label class="form-label">Address</label><textarea name="address" class="form-control" rows="3">{{ student.address if student else '' }}</textarea></div>
+                            </div>
+
+                            <div class="mt-4 text-end">
+                                <a href="{{ url_for('view_students') }}" class="btn btn-secondary">Cancel</a>
+                                <button type="submit" class="btn btn-primary">{% if student %}Update Student{% else %}Add Student{% endif %}</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('imageUpload').addEventListener('change', function(event) {
+            const [file] = event.target.files;
+            if (file) {
+                document.getElementById('imagePreview').src = URL.createObjectURL(file);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expenses</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+  <style>
+    /* Modal */
+    .modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      backdrop-filter: var(--blur-backdrop);
+      border-radius: 20px;
+      padding: 2rem;
+      width: 400px;
+      max-width: 90%;
+      z-index: 2000;
+      transition: all 0.3s ease-in-out;
+    }
+    .modal.active { transform: translate(-50%, -50%) scale(1); }
+    .modal-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; }
+    .modal-header h2 { font-size:1.5rem; color:var(--text-primary); }
+    .modal-close { background:transparent; border:none; font-size:1.2rem; cursor:pointer; color:var(--accent-danger); }
+    .modal form input, .modal form select, .modal form textarea {
+      width:100%; padding:0.75rem 1rem; margin-bottom:1rem; border-radius:12px;
+      border:1px solid var(--border); background: rgba(255,255,255,0.05); color:var(--text-primary);
+    }
+    .modal form button {
+      width:100%; padding:0.75rem; border-radius:12px; border:none;
+      background: var(--accent-primary); color:white; font-weight:600; cursor:pointer; transition: all 0.3s ease;
+    }
+    .modal form button:hover { background: var(--accent-secondary); }
+  </style>
+</head>
+<body>
+  <!-- Background Orbs -->
+  <div class="bg-orbs">
+    <div class="orb"></div>
+    <div class="orb"></div>
+    <div class="orb"></div>
+  </div>
+
+  <!-- Page Content -->
+  <div class="content" style="padding:2rem; max-width:1200px; margin:0 auto;">
+    <div class="page-header">
+      <h1 class="page-title">Expenses</h1>
+      <p class="page-subtitle">Track and manage your expenses efficiently.</p>
+      <p class="page-subtitle">Total: ₹{{ total }}</p>
+      <div style="margin-top:1rem;">
+        {% if expenses %}
+        <div style="margin-top:1rem; display:flex; gap:1rem; flex-wrap:wrap;">
+
+  <a href="{{ url_for('export_csv') }}" class="action-btn" style="padding:0.75rem 1.5rem; border-radius:12px; display:inline-flex; align-items:center; gap:0.5rem; background: var(--accent-primary); color:white; text-decoration:none; font-weight:600; transition: all 0.3s ease;">
+    <i class="fa fa-file-csv"></i> Export CSV
+  </a>
+  <a href="{{ url_for('export_pdf') }}" class="action-btn" style="padding:0.75rem 1.5rem; border-radius:12px; display:inline-flex; align-items:center; gap:0.5rem; background: var(--accent-secondary); color:white; text-decoration:none; font-weight:600; transition: all 0.3s ease;">
+    <i class="fa fa-file-pdf"></i> Export PDF
+  </a>
+  {% else %}
+  <div style="margin-top:1rem; display:flex; gap:1rem; flex-wrap:wrap;">
+  <a href="#" class="action-btn disabled-btn" style="pointer-events:none; opacity:0.5; background: var(--accent-primary); color:white; display:inline-flex; align-items:center; gap:0.5rem; padding:0.75rem 1.5rem; border-radius:12px; text-decoration:none; font-weight:600;">
+    <i class="fa fa-file-csv"></i> Export CSV
+  </a>
+  <a href="#" class="action-btn disabled-btn" style="pointer-events:none; opacity:0.5; background: var(--accent-secondary); color:white; display:inline-flex; align-items:center; gap:0.5rem; padding:0.75rem 1.5rem; border-radius:12px; text-decoration:none; font-weight:600;">
+    <i class="fa fa-file-pdf"></i> Export PDF
+  </a>
+</div>
+{% endif %}
+</div>
+
+      </div>
+      <div style="margin-top:1rem;">
+        <a href="#" class="action-btn" id="addExpenseBtn"><i class="fa fa-plus"></i> Add Expense</a>
+      </div>
+    </div>
+
+    <div class="stats-grid" style="margin-top:2rem;">
+      {% for e in expenses %}
+      <div class="stat-card">
+        <div class="stat-header">
+          <div class="stat-icon icon-devices"><i class="fa fa-money-bill"></i></div>
+          <div class="stat-info">
+            <div class="stat-label">{{ e.title }}</div>
+            <div class="stat-value">₹{{ e.amount }}</div>
+            <div class="stat-description">{{ e.date }}</div>
+          </div>
+        </div>
+        <div class="stat-trend">
+          <span class="trend-neutral">{{ e.category }}</span>
+        </div>
+        <div style="margin-top:1rem; display:flex; gap:0.5rem;">
+          <a href="{{ url_for('edit_expense', id=e.id) }}" class="action-btn"><i class="fa fa-edit"></i> Edit</a>
+          <form action="{{ url_for('delete_expense', id=e.id) }}" method="POST" style="display:inline;">
+            <button class="action-btn" style="background: var(--accent-danger); color:white;"><i class="fa fa-trash"></i> Delete</button>
+          </form>
+        </div>
+      </div>
+      {% else %}
+      <p style="color:var(--text-muted); margin-left: 100px;">No expenses found.</p>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Add/Edit Modal -->
+  <div class="modal" id="expenseModal">
+    <div class="modal-header">
+      <h2 id="modalTitle">Add Expense</h2>
+      <button class="modal-close" id="closeModal">&times;</button>
+    </div>
+    <form id="expenseForm" action="{{ url_for('add_expense') }}" method="POST">
+      <input type="text" name="title" placeholder="Expense Title" required>
+      <input type="number" name="amount" placeholder="Amount" required>
+      <input type="date" name="date" required>
+      <select name="category" required>
+        <option value="">Select Category</option>
+        <option value="Food">Food</option>
+        <option value="Travel">Travel</option>
+        <option value="Shopping">Shopping</option>
+        <option value="Bills">Bills</option>
+      </select>
+      <button type="submit">Save Expense</button>
+    </form>
+  </div>
+
+  <div class="overlay" id="overlay"></div>
+
+  <script>
+    const addBtn = document.getElementById('addExpenseBtn');
+    const modal = document.getElementById('expenseModal');
+    const overlay = document.getElementById('overlay');
+    const closeModalBtn = document.getElementById('closeModal');
+
+    addBtn.addEventListener('click', () => {
+      modal.classList.add('active');
+      overlay.classList.add('active');
+      document.getElementById('modalTitle').innerText = 'Add Expense';
+      document.getElementById('expenseForm').reset();
+    });
+
+    closeModalBtn.addEventListener('click', () => {
+      modal.classList.remove('active');
+      overlay.classList.remove('active');
+    });
+
+    overlay.addEventListener('click', () => {
+      modal.classList.remove('active');
+      overlay.classList.remove('active');
+    });
+  </script>
+</body>
+</html>
+<style>
+    /* Dropdown select options */
+select {
+  background: var(--bg-primary); /* main background for select */
+  color: var(--text-primary);    /* text color */
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  appearance: none; /* remove default arrow styling */
+}
+
+/* Dropdown options specifically */
+select option {
+  background: var(--bg-primary); /* black/dark background */
+  color: var(--text-primary);    /* white text */
+}
+
+</style>

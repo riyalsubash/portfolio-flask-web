@@ -1,5 +1,6 @@
 Flask
-Flask-SQLAlchemy
-PyMySQL
 Flask-Mail
 cloudinary
+supabase
+python-dotenv
+reportlab
